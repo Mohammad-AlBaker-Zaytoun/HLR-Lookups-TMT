@@ -1,0 +1,38 @@
+<h2>FOR CSV FILES</h2>
+<form
+  action="http://youripaddress/uploadcsv"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="file" name="csvFile" />
+  <button type="submit">Upload</button>
+</form>
+
+<h2>FOR XLSX FILES</h2>
+<form
+  action="http://youripaddress/uploadxlsx"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="file" name="xlsxFile" />
+  <button type="submit">Upload</button>
+</form>
+
+<h2>FOR SINGLE LOOKUP</h2>
+<form action="http://youripaddress/nb" method="post">
+  <label for="phone-number">Phone Number:</label>
+  <input type="tel" id="phone-number" name="phoneNumber" required />
+  <button type="submit">Submit</button>
+</form>
+
+
+<h2>FOR ITERATIVE LOOKUP</h2>
+<form action="http://youripaddress/iterative" method="post">
+  <label for="phone-number">From Phone Number:</label>
+  <input type="tel" id="phone-number" name="phoneNumber" required />
+  <label for="phone-number2">To Phone Number:</label>
+  <input type="tel" id="phone-number2" name="phoneNumber2" required />
+  <label for="add-by">Add Condition:</label>
+  <input type="number" id="add-by" name="addby" required />
+  <button type="submit">Submit</button>
+</form>
