@@ -20,7 +20,7 @@ const config = {
   password: "password",
   server: "server", // or IP address
   port: 0000,
-  database: "Database Name",
+  database: "database name",
   options: {
     encrypt: true, // for security
     trustServerCertificate: true,
@@ -40,6 +40,29 @@ pool.connect((err) => {
     app.get("/", (req, res) => {
       // Lookup for a single number
       res.send("Welcome to Flash CALL BLOCK Project. Specify a route.");
+    });
+
+    app.get("/androidHistory", (req, res) => {
+      pool
+        .request()
+        .query(
+          "Select PhoneNumber from AndroidHistoryBlackList",
+          (err, result) => {
+            if (err) {
+              console.error(err);
+            } else {
+              const phoneNumbers = result.recordset.map(
+                (obj) => obj.PhoneNumber
+              );
+              console.log(phoneNumbers);
+              const phoneNumberObjects = phoneNumbers.map((phoneNumber) => {
+                return { PhoneNumber: phoneNumber };
+              });
+              console.log(phoneNumberObjects);
+              res.status(200).send(phoneNumberObjects);
+            }
+          }
+        );
     });
 
     app.post("/androidNBLookup", (req, res) => {
@@ -204,11 +227,30 @@ pool.connect((err) => {
                               pool
                                 .request()
                                 .query(
+                                  "INSERT INTO FlashCall.dbo.AndroidHistoryBlackList (PhoneNumber)VALUES (" +
+                                    phoneNb +
+                                    ");",
+                                  (err, result) => {
+                                    if (err) {
+                                      console.error(err);
+                                    } else {
+                                      console.log(
+                                        "Record inserted to database successfully!"
+                                      );
+                                    }
+                                  }
+                                );
+
+                              pool
+                                .request()
+                                .query(
                                   "INSERT INTO FlashCall.dbo.BlackListed_Phones (PhoneNumber, NetworkName, Assigned, PhoneType, Ported)VALUES (" +
                                     phoneNb +
                                     ", N'" +
                                     dynamicAttrValue +
-                                    "', N'na', N'fixed', N'false');",
+                                    "', N'na', N'fixed', N'" +
+                                    thisported +
+                                    "');",
                                   (err, result) => {
                                     if (err) {
                                       console.error(
@@ -548,7 +590,13 @@ pool.connect((err) => {
                                     phoneNb +
                                     ", N'" +
                                     dynamicAttrValue +
-                                    "', N'na', N'fixed', N'false');",
+                                    "', N'" +
+                                    thisAssigned +
+                                    "', N'" +
+                                    thisPhoneType +
+                                    "', N'" +
+                                    thisported +
+                                    "');",
                                   (err, result) => {
                                     if (err) {
                                       console.error(
@@ -575,7 +623,11 @@ pool.connect((err) => {
                                     phoneNb +
                                     ", N'" +
                                     dynamicAttrValue +
-                                    "', N'na', N'fixed', N'false', N'VALID NUMBER', N'" +
+                                    "', N'na', N'" +
+                                    thisPhoneType +
+                                    "', N'" +
+                                    thisported +
+                                    "', N'VALID NUMBER', N'" +
                                     dateFormat +
                                     "');",
                                   (err, result) => {
@@ -895,7 +947,13 @@ pool.connect((err) => {
                                         i +
                                         ", N'" +
                                         dynamicAttrValue +
-                                        "', N'na', N'fixed', N'false');",
+                                        "', N'" +
+                                        thisAssigned +
+                                        "', N'" +
+                                        thisPhoneType +
+                                        "', N'" +
+                                        thisported +
+                                        "');",
                                       (err, result) => {
                                         if (err) {
                                           console.error(
@@ -922,7 +980,13 @@ pool.connect((err) => {
                                         i +
                                         ", N'" +
                                         dynamicAttrValue +
-                                        "', N'na', N'fixed', N'false', N'VALID NUMBER', N'" +
+                                        "', N'" +
+                                        thisAssigned +
+                                        "', N'" +
+                                        thisPhoneType +
+                                        "', N'" +
+                                        thisported +
+                                        "', N'VALID NUMBER', N'" +
                                         dateFormat +
                                         "');",
                                       (err, result) => {
@@ -1278,7 +1342,13 @@ pool.connect((err) => {
                                           numbers[i] +
                                           ", N'" +
                                           dynamicAttrValue +
-                                          "', N'na', N'fixed', N'false');",
+                                          "', N'" +
+                                          thisAssigned +
+                                          "', N'" +
+                                          thisPhoneType +
+                                          "', N'" +
+                                          thisported +
+                                          "');",
                                         (err, result) => {
                                           if (err) {
                                             console.error(
@@ -1303,7 +1373,13 @@ pool.connect((err) => {
                                           numbers[i] +
                                           ", N'" +
                                           dynamicAttrValue +
-                                          "', N'na', N'fixed', N'false', N'VALID NUMBER', N'" +
+                                          "', N'" +
+                                          thisAssigned +
+                                          "', N'" +
+                                          thisPhoneType +
+                                          "', N'" +
+                                          thisported +
+                                          "', N'VALID NUMBER', N'" +
                                           dateFormat +
                                           "');",
                                         (err, result) => {
@@ -1648,7 +1724,13 @@ pool.connect((err) => {
                                       numbers[i] +
                                       ", N'" +
                                       dynamicAttrValue +
-                                      "', N'na', N'fixed', N'false');",
+                                      "', N'" +
+                                      thisAssigned +
+                                      "', N'" +
+                                      thisPhoneType +
+                                      "', N'" +
+                                      thisported +
+                                      "');",
                                     (err, result) => {
                                       if (err) {
                                         console.error(
@@ -1674,7 +1756,13 @@ pool.connect((err) => {
                                       numbers[i] +
                                       ", N'" +
                                       dynamicAttrValue +
-                                      "', N'na', N'fixed', N'false', N'VALID NUMBER', N'" +
+                                      "', N'" +
+                                      thisAssigned +
+                                      "', N'" +
+                                      thisPhoneType +
+                                      "', N'" +
+                                      thisported +
+                                      "', N'VALID NUMBER', N'" +
                                       dateFormat +
                                       "');",
                                     (err, result) => {
